@@ -1,4 +1,7 @@
-"""Pygments lexer for OpenSSL configuration files"""
+"""Pygments lexer for OpenSSL configuration files
+
+With inspiration from IniLexer and BashLexer.
+"""
 
 from pygments.lexer import Lexer, LexerContext, RegexLexer, ExtendedRegexLexer, \
     bygroups, include, using, this, do_insertions
@@ -11,9 +14,8 @@ T_SPACE = Text
 
 
 class OpenSSLConfLexer(RegexLexer):
-    """Pygments lexer for OpenSSL configuration files.
-
-    With inspiration from IniLexer and BashLexer.
+    """
+    Lexer for `OpenSSL <http://openssl.org/docs/apps/config.html>`_ configuration files.
     """
 
     name = 'OpenSSL'
