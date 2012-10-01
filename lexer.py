@@ -40,7 +40,7 @@ class OpenSSLConfLexer(RegexLexer):
             # OID
             (r'(?<=\W)\d+\.(?:\d+\.?)*(?=\W)', Name.Function),
             # Number
-            (r'(?<=\W)\d+(?=\W)', Number),
+            (r'(?<=\W)\d+(?=\W)', T_RHS),
             # Variable name
             (r'\$\w+(?:::\w+)?', Name.Variable),
             # Section reference
