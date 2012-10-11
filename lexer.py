@@ -30,7 +30,7 @@ class OpenSSLConfLexer(RegexLexer):
             # Section header
             (r'\[.*?\]\n', Keyword),
             # Left hand side
-            (r'(\b[^\s]+)(\s*)', bygroups(T_LHS, T_SPACE)),
+            (r'(\b\w+)(\s*)', bygroups(T_LHS, T_SPACE)),
             # Operator
             (r'(=)(\s*)', bygroups(Operator, T_SPACE), 'rhs'),
             # Line continuation
