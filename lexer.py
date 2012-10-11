@@ -38,7 +38,7 @@ class OpenSSLConfLexer(RegexLexer):
             # Whitespace
             (r'\s+', T_SPACE),
             # Catch all
-            (r'.', T_RHS),
+            (r'.', T_LHS),
         ],
         'rhs': [
             # Comment
