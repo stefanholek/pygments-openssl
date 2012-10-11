@@ -4,6 +4,7 @@ Changelog
 1.1 - Unreleased
 ----------------
 
+* Detect and color line continuations.
 
 1.0 - 2012-10-10
 ----------------
