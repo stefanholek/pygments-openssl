@@ -30,7 +30,21 @@ class OpenSSLConfLexer(RegexLexer):
             # Section header
             (r'\[.*?\]\n', Keyword),
             # Left hand side
-            (r'(\b[^\s]+)(\s*)(=)(\s*)', bygroups(T_LHS, T_SPACE, Operator, T_SPACE)),
+            (r'(\b[^\s]+)(\s*)', bygroups(T_LHS, T_SPACE)),
+            # Operator
+            (r'(=)(\s*)', bygroups(Operator, T_SPACE), 'rhs'),
+            # Line continuation
+            (r'\\(?=\n)', String.Escape),
+            # Whitespace
+            (r'\s+', T_SPACE),
+            # Catch all
+            (r'.', T_RHS),
+        ],
+        'rhs': [
+            # Comment
+            (r'#.*(?=\n)', Comment),
+            # Exit condition
+            (r'(?<!\\)\n', T_SPACE, '#pop'),
             # Variable name inside curly braces
             (r'\${', Name.Variable, 'curly-brace'),
             # Double-quoted string
@@ -47,18 +61,25 @@ class OpenSSLConfLexer(RegexLexer):
             (r'\@\w+', Name.Constant),
             # Critical keyword
             (r'(?i)(?<=\W)critical(?=\W)', Keyword.Pseudo),
+            # Line continuation
+            (r'\\(?=\n)', String.Escape),
             # Whitespace
             (r'\s+', T_SPACE),
             # Catch all
             (r'.', T_RHS),
         ],
         'curly-brace': [
+            # Exit condition
             (r'}', Name.Variable, '#pop'),
+            # Variable name
             (r'\w+(?:::\w+)?', Name.Variable, 'close-brace'),
+            # Catch all
             (r'[^}]+', T_RHS),
         ],
         'close-brace': [
+            # Exit condition
             (r'}', Name.Variable, '#pop:2'),
+            # Catch all
             (r'[^}]+', T_RHS),
         ],
     }
