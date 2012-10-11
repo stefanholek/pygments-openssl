@@ -45,18 +45,18 @@ class OpenSSLConfLexer(RegexLexer):
             (r'#.*(?=\n)', Comment),
             # Exit condition
             (r'(?<!\\)\n', T_SPACE, '#pop'),
-            # Variable name inside curly braces
-            (r'\${', Name.Variable, 'curly-brace'),
             # Double-quoted string
             (r'(?s)"(\\\\|\\[0-7]+|\\.|[^"\\])*"', String.Double),
             # Single-quoted string
             (r"(?s)'(\\\\|\\[0-7]+|\\.|[^'\\])*'", String.Single),
+            # Variable name inside curly braces
+            (r'\${', Name.Variable, 'curly-brace'),
+            # Variable name
+            (r'\$\w+(?:::\w+)?', Name.Variable),
             # OID
             (r'(?<=\W)\d+\.(?:\d+\.?)*(?=\W)', Name.Function),
             # Number
             (r'(?<=\W)\d+(?=\W)', T_RHS),
-            # Variable name
-            (r'\$\w+(?:::\w+)?', Name.Variable),
             # Section reference
             (r'\@\w+', Name.Constant),
             # Critical keyword
