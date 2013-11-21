@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2 - Unreleased
+1.2 - 2013-11-21
 ----------------
 
 * Update documentation.
