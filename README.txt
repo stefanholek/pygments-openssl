@@ -2,13 +2,13 @@
 pygments-openssl
 ================
 ------------------------------------------------
-A Pygments lexer for OpenSSL configuration files
+Syntax coloring for OpenSSL configuration files
 ------------------------------------------------
 
 Overview
 ========
 
-This package provides an OpenSSL_ configuration file lexer for Pygments_.
+This package provides a Pygments_ lexer for OpenSSL_ configuration files.
 The lexer is published as an entry point and, once installed, Pygments will
 pick it up automatically.
 
@@ -16,8 +16,13 @@ You can then use the ``openssl`` language with Pygments::
 
     $ pygmentize -l openssl /etc/openssl/openssl.cnf
 
+In Sphinx_ documents the lexer is selected with the ``highlight`` directive::
+
+    .. highlight:: openssl
+
 .. _OpenSSL: http://openssl.org/
 .. _Pygments: http://pygments.org/
+.. _Sphinx: http://sphinx-doc.org/
 
 Installation
 ============

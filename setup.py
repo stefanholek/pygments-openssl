@@ -4,7 +4,7 @@ version = '1.2'
 
 setup(name='pygments-openssl',
       version=version,
-      description='Pygments lexer for OpenSSL configuration files',
+      description='Syntax coloring for OpenSSL configuration files',
       long_description=open('README.txt').read() + '\n' +
                        open('CHANGES.txt').read(),
       classifiers=[
