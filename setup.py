@@ -5,8 +5,8 @@ version = '1.2'
 setup(name='pygments-openssl',
       version=version,
       description='Syntax coloring for OpenSSL configuration files',
-      long_description=open('README.txt').read() + '\n' +
-                       open('CHANGES.txt').read(),
+      long_description=open('README.rst').read() + '\n' +
+                       open('CHANGES.rst').read(),
       classifiers=[
           'Development Status :: 5 - Production/Stable',
           'Environment :: Plugins',
