@@ -31,9 +31,13 @@ setup(name='pygments-openssl',
       license='BSD-2-Clause',
       py_modules=['lexer'],
       zip_safe=True,
+      test_suite='tests',
       install_requires=[
           'setuptools',
       ],
+      extras_require={
+          'testing': ['pygments'],
+      },
       entry_points={
           'pygments.lexers': 'openssl=lexer:OpenSSLConfLexer',
       },
