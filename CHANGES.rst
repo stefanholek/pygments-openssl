@@ -4,6 +4,8 @@ Changelog
 1.3 - Unreleased
 ----------------
 
+* Add LICENSE file.
+  [stefan]
 
 1.2 - 2013-11-21
 ----------------
