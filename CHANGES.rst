@@ -7,6 +7,9 @@ Changelog
 * Add LICENSE file.
   [stefan]
 
+* Add a test suite and fix two minor whitespace lexing issues.
+  [stefan]
+
 1.2 - 2013-11-21
 ----------------
 
