@@ -34,10 +34,8 @@ setup(name='pygments-openssl',
       test_suite='tests',
       install_requires=[
           'setuptools',
+          'pygments',
       ],
-      extras_require={
-          'testing': ['pygments'],
-      },
       entry_points={
           'pygments.lexers': 'openssl=lexer:OpenSSLConfLexer',
       },
