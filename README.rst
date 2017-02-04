@@ -9,8 +9,8 @@ Overview
 ========
 
 This package provides a Pygments_ lexer for OpenSSL_ configuration files.
-The lexer is published as an entry point and, once installed, Pygments will
-pick it up automatically.
+The lexer is published as an entry point and Pygments will pick it up
+automatically.
 
 You can then use the ``openssl`` language with Pygments::
 
@@ -20,7 +20,7 @@ In Sphinx_ documents the lexer is selected with the ``highlight`` directive::
 
     .. highlight:: openssl
 
-.. _OpenSSL: http://openssl.org/
+.. _OpenSSL: https://www.openssl.org/docs/man1.1.0/apps/config.html
 .. _Pygments: http://pygments.org/
 .. _Sphinx: http://sphinx-doc.org/
 
@@ -30,7 +30,7 @@ Installation
 Use your favorite installer to install pygments-openssl into the same
 Python you have installed Pygments. For example::
 
-    $ easy_install pygments-openssl
+    $ pip install pygments-openssl
 
 To verify the installation run::
 
