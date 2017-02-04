@@ -15,7 +15,8 @@ T_SPACE = Text
 
 class OpenSSLConfLexer(RegexLexer):
     """
-    Lexer for `OpenSSL <http://openssl.org/docs/apps/config.html>`_ configuration files.
+    Lexer for `OpenSSL <https://www.openssl.org/docs/man1.1.0/apps/config.html>`_
+    configuration files.
     """
 
     name = 'OpenSSL'
@@ -26,9 +27,9 @@ class OpenSSLConfLexer(RegexLexer):
     tokens = {
         'root': [
             # Comment
-            (r'#.*\n', Comment),
+            (r'#.*(?=\n)', Comment),
             # Section header
-            (r'\[.*?\]\n', Keyword),
+            (r'\[.*?\](?=\n)', Keyword),
             # Left hand side
             (r'(\b\w+)(\s*)', bygroups(T_LHS, T_SPACE)),
             # Operator
