@@ -12,7 +12,7 @@ This package provides a Pygments_ lexer for OpenSSL_ configuration files.
 The lexer is published as an entry point and Pygments will pick it up
 automatically.
 
-You can then use the ``openssl`` language with Pygments::
+You can use the ``openssl`` language with Pygments::
 
     $ pygmentize -l openssl /etc/openssl/openssl.cnf
 
