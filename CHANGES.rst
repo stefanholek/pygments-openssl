@@ -4,7 +4,7 @@ Changelog
 1.3 - Unreleased
 ----------------
 
-* Add LICENSE file.
+* Add a LICENSE file.
   [stefan]
 
 * Add a test suite and fix two minor whitespace lexing issues.
