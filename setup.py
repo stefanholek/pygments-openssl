@@ -30,6 +30,7 @@ setup(name='pygments-openssl',
       url='https://github.com/stefanholek/pygments-openssl',
       license='BSD-2-Clause',
       py_modules=['lexer'],
+      packages=find_packages(),
       zip_safe=True,
       test_suite='tests',
       install_requires=[
