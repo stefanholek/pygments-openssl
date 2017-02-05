@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.3 - Unreleased
+1.3 - 2017-02-05
 ----------------
 
 * Add a LICENSE file.
