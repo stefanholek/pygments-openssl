@@ -28,7 +28,7 @@ Installation
 ============
 
 Use your favorite installer to install pygments-openssl into the same
-Python enviroment you have installed Pygments. For example::
+Python environment you have installed Pygments. For example::
 
     $ pip install pygments-openssl
 
