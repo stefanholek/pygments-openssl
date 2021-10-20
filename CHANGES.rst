@@ -4,10 +4,16 @@ Changelog
 1.5 - Unreleased
 ----------------
 
-- Add Python 3.8 to tox.ini. Remove old Python versions.
+* Add Python 3.8-3.10 to tox.ini. Remove old Python versions.
   [stefan]
 
-- Replace deprecated ``python setup.py test`` in tox.ini.
+* Replace deprecated ``python setup.py test`` in tox.ini.
+  [stefan]
+
+* Remove deprecated ``test_suite`` from setup.py.
+  [stefan]
+
+* Move lexer and tests into ``pygments_openssl`` namespace.
   [stefan]
 
 1.4 - 2019-01-25
