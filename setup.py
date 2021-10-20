@@ -27,7 +27,6 @@ setup(name='pygments-openssl',
       license='BSD-2-Clause',
       packages=find_packages(),
       zip_safe=True,
-      test_suite='tests',
       install_requires=[
           'setuptools',
           'pygments',
