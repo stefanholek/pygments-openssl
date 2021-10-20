@@ -20,9 +20,9 @@ In Sphinx_ documents the lexer is selected with the ``highlight`` directive::
 
     .. highlight:: openssl
 
-.. _OpenSSL: https://www.openssl.org/docs/man1.1.0/apps/config.html
-.. _Pygments: http://pygments.org/
-.. _Sphinx: http://sphinx-doc.org/
+.. _OpenSSL: https://www.openssl.org/docs/man1.1.1/man5/config.html
+.. _Pygments: https://pygments.org/
+.. _Sphinx: https://sphinx-doc.org/
 
 Installation
 ============
