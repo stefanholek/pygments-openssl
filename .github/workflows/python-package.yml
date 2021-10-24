@@ -5,9 +5,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   build:
@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['2.7', '3.6', '3.7', '3.8', '3.9', '3.10', pypy2, pypy3]
+        python-version: [ "2.7", "3.6", "3.7", "3.8", "3.9", "3.10", pypy2, pypy3 ]
 
     steps:
     - name: Check out project
@@ -27,16 +27,18 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Get pip cache dir
+    - name: Get pip cache info
       id: pip-cache
-      run: echo "::set-output name=dir::$(pip cache dir)"
+      run: |
+        echo "::set-output name=dir::$(pip cache dir)"
+        echo "::set-output name=py::$(python -c'import sys; print(sys.version_info[0])')"
 
     - name: Cache pip
       uses: actions/cache@v2
       with:
         path: ${{ steps.pip-cache.outputs.dir }}
-        key: ${{ runner.os }}-pip-v3-${{ hashFiles('setup.py') }}
-        restore-keys: ${{ runner.os }}-pip-v3-
+        key: ${{ runner.os }}-pip-py${{ steps.pip-cache.outputs.py }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{ runner.os }}-pip-py${{ steps.pip-cache.outputs.py }}-
 
     - name: Install dependencies
       run: |
