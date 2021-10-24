@@ -1,22 +1,21 @@
 # https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-# https://dev.to/hugovk/the-python-3-1-problem-85g
 
 name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "2.7", "3.6", "3.7", "3.8", "3.9", "3.10", pypy-2.7, pypy-3.7 ]
+        python-version: ["2.7", "3.6", "3.7", "3.8", "3.9", "3.10", pypy-2.7, pypy-3.7]
 
     steps:
     - name: Check out project
