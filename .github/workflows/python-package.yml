@@ -16,7 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [2.7, 3.6, 3.7, 3.8, 3.9, pypy2, pypy3]
+        # https://dev.to/hugovk/the-python-3-1-problem-85g
+        python-version: ['2.7', '3.6', '3.7', '3.8', '3.9', '3.10', 'pypy2', 'pypy3']
 
     steps:
     - uses: actions/checkout@v2
