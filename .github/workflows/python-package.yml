@@ -4,9 +4,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -16,14 +16,16 @@ jobs:
       fail-fast: false
       matrix:
         # https://dev.to/hugovk/the-python-3-1-problem-85g
-        python-version: ['2.7', '3.6', '3.7', '3.8', '3.9', '3.10', 'pypy2', 'pypy3']
+        python-version: ['2.7', '3.6', '3.7', '3.8', '3.9', '3.10', pypy2, pypy3]
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Cache pip
       uses: actions/cache@v2
       with:
@@ -33,7 +35,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
           ${{ runner.os }}-
+
     - name: Install dependencies
       run: python -m pip --disable-pip-version-check install -e .
+
     - name: Run tests
       run: python -m unittest discover
