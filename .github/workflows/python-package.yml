@@ -39,7 +39,9 @@ jobs:
         restore-keys: ${{ runner.os }}-pip-
 
     - name: Install dependencies
-      run: python -m pip --disable-pip-version-check install -e .
+      run: |
+        python -m pip --disable-pip-version-check install -U pip setuptools wheel
+        python -m pip --disable-pip-version-check install -e .
 
     - name: List installed packages
       run: python -m pip --disable-pip-version-check list
