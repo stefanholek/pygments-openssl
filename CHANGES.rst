@@ -16,6 +16,9 @@ Changelog
 * Move lexer and tests into ``pygments_openssl`` namespace.
   [stefan]
 
+* Move metadata to setup.cfg and add a pyproject.toml file.
+  [stefan]
+
 1.4 - 2019-01-25
 ----------------
 
