@@ -19,6 +19,9 @@ Changelog
 * Move metadata to setup.cfg and add a pyproject.toml file.
   [stefan]
 
+* Include tests in sdists but not in wheels.
+  [stefan]
+
 1.4 - 2019-01-25
 ----------------
 
