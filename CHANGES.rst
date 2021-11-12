@@ -22,6 +22,9 @@ Changelog
 * Include tests in sdists but not in wheels.
   [stefan]
 
+* Support new ``.pragma`` and ``.include`` directives.
+  [stefan]
+
 1.4 - 2019-01-25
 ----------------
 
