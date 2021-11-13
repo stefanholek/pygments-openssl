@@ -171,6 +171,19 @@ class LexerTests(unittest.TestCase):
         self.assertEqual(tokens[6], (token.Name.Variable, '}'))
         self.assertEqual(tokens[7], (token.Text, '\n'))
 
+    def test_lex_rhs_variable_name_parentheses(self):
+        from pygments import token
+
+        tokens = self.lex('foo = $(ENV::variable)\n', 'openssl')
+        self.assertEqual(tokens[0], (token.Name.Attribute, 'foo'))
+        self.assertEqual(tokens[1], (token.Text, ' '))
+        self.assertEqual(tokens[2], (token.Operator, '='))
+        self.assertEqual(tokens[3], (token.Text, ' '))
+        self.assertEqual(tokens[4], (token.Name.Variable, '$('))
+        self.assertEqual(tokens[5], (token.Name.Variable, 'ENV::variable'))
+        self.assertEqual(tokens[6], (token.Name.Variable, ')'))
+        self.assertEqual(tokens[7], (token.Text, '\n'))
+
     def test_lex_rhs_oid(self):
         from pygments import token
 
@@ -252,6 +265,23 @@ class LexerTests(unittest.TestCase):
 
         tokens = self.lex('dir', 'openssl')
         self.assertEqual(tokens[0], (token.Name.Attribute, 'dir'))
+
+    def test_lex_missing_lhs(self):
+        from pygments import token
+
+        tokens = self.lex('= foo\ndir = .\n', 'openssl')
+        self.assertEqual(tokens[0], (token.Operator, '='))
+        self.assertEqual(tokens[1], (token.Text, ' '))
+        self.assertEqual(tokens[2], (token.String, 'f'))
+        self.assertEqual(tokens[3], (token.String, 'o'))
+        self.assertEqual(tokens[4], (token.String, 'o'))
+        self.assertEqual(tokens[5], (token.Text, '\n'))
+        self.assertEqual(tokens[6], (token.Name.Attribute, 'dir'))
+        self.assertEqual(tokens[7], (token.Text, ' '))
+        self.assertEqual(tokens[8], (token.Operator, '='))
+        self.assertEqual(tokens[9], (token.Text, ' '))
+        self.assertEqual(tokens[10], (token.String, '.'))
+        self.assertEqual(tokens[11], (token.Text, '\n'))
 
 
 class DirectiveLexerTests(unittest.TestCase):
