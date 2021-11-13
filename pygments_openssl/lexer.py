@@ -12,6 +12,10 @@ T_LHS = Name.Attribute
 T_RHS = String
 T_SPACE = Text
 
+T_NUMBER = T_RHS
+T_OID = Name.Function
+T_SECREF = Name.Constant
+
 
 class OpenSSLConfLexer(RegexLexer):
     """
@@ -25,19 +29,67 @@ class OpenSSLConfLexer(RegexLexer):
     mimetypes = ['text/x-openssl']
 
     tokens = {
-        'root': [
+        'comment': [
             # Comment
             (r'#.*(?=\n)', Comment),
-            # Section header
-            (r'\[.*?\](?=\n)', Keyword),
-            # Pragma directive
-            (r'(?i)(\.pragma)([^\S\n]*)(=*)([^\S\n]*)', bygroups(T_LHS, T_SPACE, Operator, T_SPACE), 'pragma'),
-            # Other directives
-            (r'(\.\w+)([^\S\n]*)(=*)([^\S\n]*)', bygroups(T_LHS, T_SPACE, Operator, T_SPACE), 'other'),
-            # Left hand side
-            (r'(\w+)([^\S\n]*)', bygroups(T_LHS, T_SPACE)),
-            # Operator
-            (r'(=)([^\S\n]*)', bygroups(Operator, T_SPACE), 'rhs'),
+        ],
+        'string': [
+            # Double-quoted string
+            (r'(?s)"(\\\\|\\[0-7]+|\\.|[^"\\])*"', String.Double),
+            # Single-quoted string
+            (r"(?s)'(\\\\|\\[0-7]+|\\.|[^'\\])*'", String.Single),
+        ],
+        'variable': [
+            # Variable name inside curly braces
+            (r'\${', Name.Variable, 'curly-brace'),
+            # Variable name inside parentheses
+            (r'\$\(', Name.Variable, 'parenthesis'),
+            # Variable name
+            (r'\$\w+(?:::\w+)?', Name.Variable),
+        ],
+        'number': [
+            # Float
+            (r'(?<=\W)\d+\.\d+(?=\W)', T_NUMBER),
+            # Int
+            (r'(?<=\W)\d+(?=\W)', T_NUMBER),
+        ],
+        'curly-brace': [
+            # Exit condition
+            (r'}', Name.Variable, '#pop'),
+            # Variable name
+            (r'\w+(?:::\w+)?', Name.Variable, 'close-brace'),
+            # Whitespace
+            (r'\s+', T_SPACE),
+            # Catch all
+            (r'[^}]+', T_RHS),
+        ],
+        'close-brace': [
+            # Exit condition
+            (r'}', Name.Variable, '#pop:2'),
+            # Whitespace
+            (r'\s+', T_SPACE),
+            # Catch all
+            (r'[^}]+', T_RHS),
+        ],
+        'parenthesis': [
+            # Exit condition
+            (r'\)', Name.Variable, '#pop'),
+            # Variable name
+            (r'\w+(?:::\w+)?', Name.Variable, 'close-paren'),
+            # Whitespace
+            (r'\s+', T_SPACE),
+            # Catch all
+            (r'[^)]+', T_RHS),
+        ],
+        'close-paren': [
+            # Exit condition
+            (r'\)', Name.Variable, '#pop:2'),
+            # Whitespace
+            (r'\s+', T_SPACE),
+            # Catch all
+            (r'[^)]+', T_RHS),
+        ],
+        'lhs-default': [
             # Line continuation
             (r'\\(?=\n)', String.Escape),
             # Whitespace
@@ -45,27 +97,7 @@ class OpenSSLConfLexer(RegexLexer):
             # Catch all
             (r'.', T_LHS),
         ],
-        'rhs': [
-            # Comment
-            (r'#.*(?=\n)', Comment),
-            # Exit condition
-            (r'(?<!\\)\n', T_SPACE, '#pop'),
-            # Double-quoted string
-            (r'(?s)"(\\\\|\\[0-7]+|\\.|[^"\\])*"', String.Double),
-            # Single-quoted string
-            (r"(?s)'(\\\\|\\[0-7]+|\\.|[^'\\])*'", String.Single),
-            # Variable name inside curly braces
-            (r'\${', Name.Variable, 'curly-brace'),
-            # Variable name
-            (r'\$\w+(?:::\w+)?', Name.Variable),
-            # OID
-            (r'(?<=\W)\d+\.(?:\d+\.?)*(?=\W)', Name.Function),
-            # Number
-            (r'(?<=\W)\d+(?=\W)', T_RHS),
-            # Section reference
-            (r'\@\w+', Name.Constant),
-            # Critical keyword
-            (r'(?i)(?<=\W)critical(?=\W)', Keyword.Pseudo),
+        'rhs-default': [
             # Line continuation
             (r'\\(?=\n)', String.Escape),
             # Whitespace
@@ -73,87 +105,63 @@ class OpenSSLConfLexer(RegexLexer):
             # Catch all
             (r'.', T_RHS),
         ],
-        'curly-brace': [
-            # Exit condition
-            (r'}', Name.Variable, '#pop'),
-            # Variable name
-            (r'\w+(?:::\w+)?', Name.Variable, 'close-brace'),
-            # Catch all
-            (r'[^}]+', T_RHS),
+        'root': [
+            include('comment'),
+            # Section header
+            (r'\[.*?\](?=\n)', Keyword),
+            # Pragma directive
+            (r'(?i)(\.pragma)([^\S\n]*)(=*)([^\S\n]*)', bygroups(T_LHS, T_SPACE, Operator, T_SPACE), 'pragma'),
+            # Other directives
+            (r'(\.\w+)([^\S\n]*)(=*)([^\S\n]*)', bygroups(T_LHS, T_SPACE, Operator, T_SPACE), 'other'),
+            # Left hand side
+            (r'(\w+)(\s*)', bygroups(T_LHS, T_SPACE)),
+            # Operator
+            (r'(=)([^\S\n]*)', bygroups(Operator, T_SPACE), 'rhs'),
+            include('lhs-default'),
         ],
-        'close-brace': [
+        'rhs': [
+            include('comment'),
             # Exit condition
-            (r'}', Name.Variable, '#pop:2'),
-            # Catch all
-            (r'[^}]+', T_RHS),
+            (r'(?<!\\)\n', T_SPACE, '#pop'),
+            include('string'),
+            include('variable'),
+            # OID
+            (r'(?<=\W)\d+\.(?:\d+\.?)*(?=\W)', T_OID),
+            include('number'),
+            # Section reference
+            (r'\@\w+', T_SECREF),
+            # Critical keyword
+            (r'(?i)(?<=\W)critical(?=\W)', Keyword.Pseudo),
+            include('rhs-default'),
         ],
         'pragma': [
-            # Comment
-            (r'#.*(?=\n)', Comment),
+            include('comment'),
             # Exit condition
             (r'(?<!\\)\n', T_SPACE, '#pop'),
             # Directive name
             (r'(\w+)([^\S\n]*)(:)([^\S\n]*)', bygroups(Keyword.Pseudo, T_SPACE, Operator, T_SPACE), 'value'),
-            # Double-quoted string
-            (r'(?s)"(\\\\|\\[0-7]+|\\.|[^"\\])*"', String.Double),
-            # Single-quoted string
-            (r"(?s)'(\\\\|\\[0-7]+|\\.|[^'\\])*'", String.Single),
-            # Variable name inside curly braces
-            (r'\${', Name.Variable, 'curly-brace'),
-            # Variable name
-            (r'\$\w+(?:::\w+)?', Name.Variable),
-            # Number
-            (r'(?<=\W)\d+(?=\W)', T_RHS),
-            # Line continuation
-            (r'\\(?=\n)', String.Escape),
-            # Whitespace
-            (r'\s+', T_SPACE),
-            # Catch all
-            (r'.', T_RHS),
+            include('string'),
+            include('variable'),
+            include('number'),
+            include('rhs-default'),
         ],
         'value': [
-            # Comment
-            (r'#.*(?=\n)', Comment),
+            include('comment'),
             # Exit condition
             (r'(?<!\\)\n', T_SPACE, '#pop:2'),
-            # Double-quoted string
-            (r'(?s)"(\\\\|\\[0-7]+|\\.|[^"\\])*"', String.Double),
-            # Single-quoted string
-            (r"(?s)'(\\\\|\\[0-7]+|\\.|[^'\\])*'", String.Single),
-            # Variable name inside curly braces
-            (r'\${', Name.Variable, 'curly-brace'),
-            # Variable name
-            (r'\$\w+(?:::\w+)?', Name.Variable),
-            # Number
-            (r'(?<=\W)\d+(?=\W)', T_RHS),
-            # Line continuation
-            (r'\\(?=\n)', String.Escape),
-            # Whitespace
-            (r'\s+', T_SPACE),
-            # Catch all
-            (r'.', T_RHS),
+            include('string'),
+            include('variable'),
+            include('number'),
+            include('rhs-default'),
         ],
         'other': [
-            # Comment
-            (r'#.*(?=\n)', Comment),
+            include('comment'),
             # Exit condition
             (r'(?<!\\)\n', T_SPACE, '#pop'),
-            # Double-quoted string
-            (r'(?s)"(\\\\|\\[0-7]+|\\.|[^"\\])*"', String.Double),
-            # Single-quoted string
-            (r"(?s)'(\\\\|\\[0-7]+|\\.|[^'\\])*'", String.Single),
-            # Variable name inside curly braces
-            (r'\${', Name.Variable, 'curly-brace'),
-            # Variable name
-            (r'\$\w+(?:::\w+)?', Name.Variable),
-            # Number
-            (r'(?<=\W)\d+(?=\W)', T_RHS),
-            # Line continuation
-            (r'\\(?=\n)', String.Escape),
-            # Whitespace
-            (r'\s+', T_SPACE),
-            # Catch all
-            (r'.', T_RHS),
+            include('string'),
+            include('variable'),
+            include('number'),
+            include('rhs-default'),
         ],
     }
 
