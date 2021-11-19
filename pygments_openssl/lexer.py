@@ -131,9 +131,14 @@ class OpenSSLConfLexer(RegexLexer):
             # Section header
             (r'\[.*?\](?=\n)', Keyword),
             # Pragma directive
-            (r'(?i)(\.pragma)([^\S\n]*)(=*)([^\S\n]*)', bygroups(T_LHS, T_SPACE, Operator, T_SPACE), 'pragma'),
+            (r'(?i)(\.pragma)(?=\W)([^\S\n]*)(=)([^\S\n]*)', bygroups(T_LHS, T_SPACE, Operator, T_SPACE), 'pragma'),
+            (r'(?i)(\.pragma)(?=\W)([^\S\n]+)', bygroups(T_LHS, T_SPACE), 'pragma'),
+            # Include directive
+            (r'(?i)(\.include)(?=\W)([^\S\n]*)(=)([^\S\n]*)', bygroups(T_LHS, T_SPACE, Operator, T_SPACE), 'other'),
+            (r'(?i)(\.include)(?=\W)([^\S\n]+)', bygroups(T_LHS, T_SPACE), 'other'),
             # Other directives
-            (r'(\.\w+)([^\S\n]*)(=*)([^\S\n]*)', bygroups(T_LHS, T_SPACE, Operator, T_SPACE), 'other'),
+            (r'(\.\S+?)([^\S\n]*)(=)([^\S\n]*)', bygroups(T_LHS, T_SPACE, Operator, T_SPACE), 'other'),
+            (r'(\.\S+?)([^\S\n]+)', bygroups(T_LHS, T_SPACE), 'other'),
             # Left hand side
             (r'(\w+)(\s*)', bygroups(T_LHS, T_SPACE)),
             # Operator
@@ -165,17 +170,10 @@ class OpenSSLConfLexer(RegexLexer):
             include('comment'),
             # Exit condition
             (r'(?<!\\)\n', T_SPACE, '#pop'),
-            # Directive name
-            (r'(\w+)([^\S\n]*)(:)([^\S\n]*)', bygroups(Keyword.Pseudo, T_SPACE, Operator, T_SPACE), 'value'),
-            include('string'),
-            include('variable'),
-            include('number'),
-            include('rhs-default'),
-        ],
-        'value': [
-            include('comment'),
-            # Exit condition
-            (r'(?<!\\)\n', T_SPACE, '#pop:2'),
+            # Known directive names
+            (r'(?i)(?<=\W)(abspath|dollarid|includedir)(?=\W)([^\S\n]*)(:)([^\S\n]*)', bygroups(Keyword.Pseudo, T_SPACE, Operator, T_SPACE), 'value'),
+            # Other directive names
+            (r'(\S+?)([^\S\n]*)(:)([^\S\n]*)', bygroups(Keyword.Pseudo, T_SPACE, Operator, T_SPACE), 'value'),
             include('string'),
             include('variable'),
             include('number'),
@@ -190,6 +188,15 @@ class OpenSSLConfLexer(RegexLexer):
             include('number'),
             include('rhs-default'),
         ],
+        'value': [
+            include('comment'),
+            # Exit condition
+            (r'(?<!\\)\n', T_SPACE, '#pop:2'),
+            include('string'),
+            include('variable'),
+            include('number'),
+            include('rhs-default'),
+        ],
     }
 
     def analyse_text(text):
@@ -197,4 +204,3 @@ class OpenSSLConfLexer(RegexLexer):
         if npos < 3:
             return False
         return text[0] == '[' and text[npos-1] == ']'
-
