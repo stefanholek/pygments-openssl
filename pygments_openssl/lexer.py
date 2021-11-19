@@ -4,7 +4,7 @@ With inspiration from IniLexer and BashLexer.
 """
 
 from pygments.lexer import Lexer, LexerContext, RegexLexer, ExtendedRegexLexer, \
-    bygroups, include, using, this, do_insertions
+    bygroups, include, using, this, do_insertions, default
 from pygments.token import Punctuation, Text, Comment, Keyword, Name, String, \
     Generic, Operator, Number, Whitespace, Literal
 
@@ -15,6 +15,10 @@ T_SPACE = Text
 T_NUMBER = T_RHS
 T_OID = Name.Function
 T_SECREF = Name.Constant
+
+T_EMAIL = T_RHS
+T_IP = T_RHS
+T_HEX = T_RHS
 
 
 class OpenSSLConfLexer(RegexLexer):
@@ -52,6 +56,23 @@ class OpenSSLConfLexer(RegexLexer):
             (r'(?<=\W)\d+\.\d+(?=\W)', T_NUMBER),
             # Int
             (r'(?<=\W)\d+(?=\W)', T_NUMBER),
+        ],
+        'email': [
+            # Email
+            (r'[\w\.+-]+\@[\w\.+-]+', T_EMAIL),
+            default('#pop'),
+        ],
+        'ip': [
+            # IP4
+            (r'[\d\.]+', T_IP),
+            # IP6
+            (r'[\da-fA-F:]+', T_IP),
+            default('#pop'),
+        ],
+        'hex': [
+            # Hex
+            (r'[\da-fA-F:]+', T_HEX),
+            default('#pop'),
         ],
         'curly-brace': [
             # Exit condition
@@ -123,13 +144,19 @@ class OpenSSLConfLexer(RegexLexer):
             include('comment'),
             # Exit condition
             (r'(?<!\\)\n', T_SPACE, '#pop'),
+            # Email
+            (r'(?i)(?<=\W)(email)(?=\W)([^\S\n]*)(:)([^\S\n]*)', bygroups(T_RHS, T_SPACE, T_RHS, T_SPACE), 'email'),
+            # IP
+            (r'(?i)(?<=\W)(IP)(?=\W)([^\S\n]*)(:)([^\S\n]*)', bygroups(T_RHS, T_SPACE, T_RHS, T_SPACE), 'ip'),
+            # DER
+            (r'(?i)(?<=\W)(DER)(?=\W)([^\S\n]*)(:)([^\S\n]*)', bygroups(T_RHS, T_SPACE, T_RHS, T_SPACE), 'hex'),
             include('string'),
             include('variable'),
             # OID
             (r'(?<=\W)\d+\.(?:\d+\.?)*(?=\W)', T_OID),
             include('number'),
             # Section reference
-            (r'\@\w+', T_SECREF),
+            (r'(?<=\W)\@\w+', T_SECREF),
             # Critical keyword
             (r'(?i)(?<=\W)critical(?=\W)', Keyword.Pseudo),
             include('rhs-default'),
