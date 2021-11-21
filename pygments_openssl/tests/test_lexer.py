@@ -166,10 +166,8 @@ class LexerTests(unittest.TestCase):
         self.assertEqual(tokens[1], (token.Text, ' '))
         self.assertEqual(tokens[2], (token.Operator, '='))
         self.assertEqual(tokens[3], (token.Text, ' '))
-        self.assertEqual(tokens[4], (token.Name.Variable, '${'))
-        self.assertEqual(tokens[5], (token.Name.Variable, 'ENV::variable'))
-        self.assertEqual(tokens[6], (token.Name.Variable, '}'))
-        self.assertEqual(tokens[7], (token.Text, '\n'))
+        self.assertEqual(tokens[4], (token.Name.Variable, '${ENV::variable}'))
+        self.assertEqual(tokens[5], (token.Text, '\n'))
 
     def test_lex_rhs_variable_name_parentheses(self):
         from pygments import token
@@ -179,10 +177,8 @@ class LexerTests(unittest.TestCase):
         self.assertEqual(tokens[1], (token.Text, ' '))
         self.assertEqual(tokens[2], (token.Operator, '='))
         self.assertEqual(tokens[3], (token.Text, ' '))
-        self.assertEqual(tokens[4], (token.Name.Variable, '$('))
-        self.assertEqual(tokens[5], (token.Name.Variable, 'ENV::variable'))
-        self.assertEqual(tokens[6], (token.Name.Variable, ')'))
-        self.assertEqual(tokens[7], (token.Text, '\n'))
+        self.assertEqual(tokens[4], (token.Name.Variable, '$(ENV::variable)'))
+        self.assertEqual(tokens[5], (token.Text, '\n'))
 
     def test_lex_rhs_oid(self):
         from pygments import token
@@ -226,11 +222,8 @@ class LexerTests(unittest.TestCase):
         self.assertEqual(tokens[2], (token.Operator, '='))
         self.assertEqual(tokens[3], (token.Text, ' '))
         self.assertEqual(tokens[4], (token.Keyword.Pseudo, 'critical'))
-        self.assertEqual(tokens[5], (token.String, ','))
-        self.assertEqual(tokens[6], (token.String, 'b'))
-        self.assertEqual(tokens[7], (token.String, 'a'))
-        self.assertEqual(tokens[8], (token.String, 'r'))
-        self.assertEqual(tokens[9], (token.Text, '\n'))
+        self.assertEqual(tokens[5], (token.String, ',bar'))
+        self.assertEqual(tokens[6], (token.Text, '\n'))
 
     def test_lex_incomplete_lhs(self):
         from pygments import token
@@ -272,16 +265,14 @@ class LexerTests(unittest.TestCase):
         tokens = self.lex('= foo\ndir = .\n', 'openssl')
         self.assertEqual(tokens[0], (token.Operator, '='))
         self.assertEqual(tokens[1], (token.Text, ' '))
-        self.assertEqual(tokens[2], (token.String, 'f'))
-        self.assertEqual(tokens[3], (token.String, 'o'))
-        self.assertEqual(tokens[4], (token.String, 'o'))
-        self.assertEqual(tokens[5], (token.Text, '\n'))
-        self.assertEqual(tokens[6], (token.Name.Attribute, 'dir'))
+        self.assertEqual(tokens[2], (token.String, 'foo'))
+        self.assertEqual(tokens[3], (token.Text, '\n'))
+        self.assertEqual(tokens[4], (token.Name.Attribute, 'dir'))
+        self.assertEqual(tokens[5], (token.Text, ' '))
+        self.assertEqual(tokens[6], (token.Operator, '='))
         self.assertEqual(tokens[7], (token.Text, ' '))
-        self.assertEqual(tokens[8], (token.Operator, '='))
-        self.assertEqual(tokens[9], (token.Text, ' '))
-        self.assertEqual(tokens[10], (token.String, '.'))
-        self.assertEqual(tokens[11], (token.Text, '\n'))
+        self.assertEqual(tokens[8], (token.String, '.'))
+        self.assertEqual(tokens[9], (token.Text, '\n'))
 
 
 class DirectiveLexerTests(unittest.TestCase):
@@ -296,10 +287,8 @@ class DirectiveLexerTests(unittest.TestCase):
         tokens = self.lex('.directive foo\n', 'openssl')
         self.assertEqual(tokens[0], (token.Name.Attribute, '.directive'))
         self.assertEqual(tokens[1], (token.Text, ' '))
-        self.assertEqual(tokens[2], (token.String, 'f'))
-        self.assertEqual(tokens[3], (token.String, 'o'))
-        self.assertEqual(tokens[4], (token.String, 'o'))
-        self.assertEqual(tokens[5], (token.Text, '\n'))
+        self.assertEqual(tokens[2], (token.String, 'foo'))
+        self.assertEqual(tokens[3], (token.Text, '\n'))
 
     def test_lex_directive_and_operator(self):
         from pygments import token
@@ -309,10 +298,8 @@ class DirectiveLexerTests(unittest.TestCase):
         self.assertEqual(tokens[1], (token.Text, ' '))
         self.assertEqual(tokens[2], (token.Operator, '='))
         self.assertEqual(tokens[3], (token.Text, ' '))
-        self.assertEqual(tokens[4], (token.String, 'f'))
-        self.assertEqual(tokens[5], (token.String, 'o'))
-        self.assertEqual(tokens[6], (token.String, 'o'))
-        self.assertEqual(tokens[7], (token.Text, '\n'))
+        self.assertEqual(tokens[4], (token.String, 'foo'))
+        self.assertEqual(tokens[5], (token.Text, '\n'))
 
     def test_lex_directive_with_leading_whitespace(self):
         from pygments import token
@@ -321,10 +308,8 @@ class DirectiveLexerTests(unittest.TestCase):
         self.assertEqual(tokens[0], (token.Text, '  '))
         self.assertEqual(tokens[1], (token.Name.Attribute, '.directive'))
         self.assertEqual(tokens[2], (token.Text, ' '))
-        self.assertEqual(tokens[3], (token.String, 'f'))
-        self.assertEqual(tokens[4], (token.String, 'o'))
-        self.assertEqual(tokens[5], (token.String, 'o'))
-        self.assertEqual(tokens[6], (token.Text, '\n'))
+        self.assertEqual(tokens[3], (token.String, 'foo'))
+        self.assertEqual(tokens[4], (token.Text, '\n'))
 
     def test_lex_incomplete_directive(self):
         from pygments import token
@@ -338,10 +323,8 @@ class DirectiveLexerTests(unittest.TestCase):
         self.assertEqual(tokens[1], (token.Text, '\n'))
         self.assertEqual(tokens[2], (token.Name.Attribute, '.directive'))
         self.assertEqual(tokens[3], (token.Text, ' '))
-        self.assertEqual(tokens[4], (token.String, 'f'))
-        self.assertEqual(tokens[5], (token.String, 'o'))
-        self.assertEqual(tokens[6], (token.String, 'o'))
-        self.assertEqual(tokens[7], (token.Text, '\n'))
+        self.assertEqual(tokens[4], (token.String, 'foo'))
+        self.assertEqual(tokens[5], (token.Text, '\n'))
 
     def test_lex_incomplete_directive_and_operator(self):
         from pygments import token
@@ -361,10 +344,8 @@ class DirectiveLexerTests(unittest.TestCase):
         self.assertEqual(tokens[5], (token.Text, ' '))
         self.assertEqual(tokens[6], (token.Operator, '='))
         self.assertEqual(tokens[7], (token.Text, ' '))
-        self.assertEqual(tokens[8], (token.String, 'f'))
-        self.assertEqual(tokens[9], (token.String, 'o'))
-        self.assertEqual(tokens[10], (token.String, 'o'))
-        self.assertEqual(tokens[11], (token.Text, '\n'))
+        self.assertEqual(tokens[8], (token.String, 'foo'))
+        self.assertEqual(tokens[9], (token.Text, '\n'))
 
     def test_lex_incomplete_directive_string(self):
         from pygments import token
@@ -377,9 +358,7 @@ class DirectiveLexerTests(unittest.TestCase):
         self.assertEqual(tokens[1], (token.Text, '\n'))
         self.assertEqual(tokens[2], (token.Name.Attribute, '.directive'))
         self.assertEqual(tokens[3], (token.Text, ' '))
-        self.assertEqual(tokens[4], (token.String, 'f'))
-        self.assertEqual(tokens[5], (token.String, 'o'))
-        self.assertEqual(tokens[6], (token.String, 'o'))
+        self.assertEqual(tokens[4], (token.String, 'foo'))
 
 
 class PragmaDirectiveLexerTests(unittest.TestCase):
@@ -392,140 +371,206 @@ class PragmaDirectiveLexerTests(unittest.TestCase):
         from pygments import token
 
         tokens = self.lex('.pragma foo\n', 'openssl')
-        self.assertEqual(tokens[0], (token.Name.Attribute, '.pragma'))
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.pragma'))
         self.assertEqual(tokens[1], (token.Text, ' '))
-        self.assertEqual(tokens[2], (token.String, 'f'))
-        self.assertEqual(tokens[3], (token.String, 'o'))
-        self.assertEqual(tokens[4], (token.String, 'o'))
-        self.assertEqual(tokens[5], (token.Text, '\n'))
+        self.assertEqual(tokens[2], (token.String, 'foo'))
+        self.assertEqual(tokens[3], (token.Text, '\n'))
 
     def test_lex_pragma_directive_and_operator(self):
         from pygments import token
 
         tokens = self.lex('.pragma = foo\n', 'openssl')
-        self.assertEqual(tokens[0], (token.Name.Attribute, '.pragma'))
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.pragma'))
         self.assertEqual(tokens[1], (token.Text, ' '))
         self.assertEqual(tokens[2], (token.Operator, '='))
         self.assertEqual(tokens[3], (token.Text, ' '))
-        self.assertEqual(tokens[4], (token.String, 'f'))
-        self.assertEqual(tokens[5], (token.String, 'o'))
-        self.assertEqual(tokens[6], (token.String, 'o'))
-        self.assertEqual(tokens[7], (token.Text, '\n'))
+        self.assertEqual(tokens[4], (token.String, 'foo'))
+        self.assertEqual(tokens[5], (token.Text, '\n'))
 
     def test_lex_pragme_directive_with_leading_whitespace(self):
         from pygments import token
 
         tokens = self.lex('  .pragma foo\n', 'openssl')
         self.assertEqual(tokens[0], (token.Text, '  '))
-        self.assertEqual(tokens[1], (token.Name.Attribute, '.pragma'))
+        self.assertEqual(tokens[1], (token.Name.Builtin, '.pragma'))
         self.assertEqual(tokens[2], (token.Text, ' '))
-        self.assertEqual(tokens[3], (token.String, 'f'))
-        self.assertEqual(tokens[4], (token.String, 'o'))
-        self.assertEqual(tokens[5], (token.String, 'o'))
-        self.assertEqual(tokens[6], (token.Text, '\n'))
+        self.assertEqual(tokens[3], (token.String, 'foo'))
+        self.assertEqual(tokens[4], (token.Text, '\n'))
 
     def test_lex_pragma_directive_name(self):
         from pygments import token
 
-        tokens = self.lex('.pragma foo:\n', 'openssl')
-        self.assertEqual(tokens[0], (token.Name.Attribute, '.pragma'))
+        tokens = self.lex('.pragma abspath:\n', 'openssl')
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.pragma'))
         self.assertEqual(tokens[1], (token.Text, ' '))
-        self.assertEqual(tokens[2], (token.Keyword.Pseudo, 'foo'))
+        self.assertEqual(tokens[2], (token.Keyword.Pseudo, 'abspath'))
         self.assertEqual(tokens[3], (token.Operator, ':'))
 
     def test_lex_pragma_directive_name_and_operator(self):
         from pygments import token
 
-        tokens = self.lex('.pragma = foo:\n', 'openssl')
-        self.assertEqual(tokens[0], (token.Name.Attribute, '.pragma'))
+        tokens = self.lex('.pragma = abspath:\n', 'openssl')
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.pragma'))
         self.assertEqual(tokens[1], (token.Text, ' '))
         self.assertEqual(tokens[2], (token.Operator, '='))
         self.assertEqual(tokens[3], (token.Text, ' '))
-        self.assertEqual(tokens[4], (token.Keyword.Pseudo, 'foo'))
+        self.assertEqual(tokens[4], (token.Keyword.Pseudo, 'abspath'))
         self.assertEqual(tokens[5], (token.Operator, ':'))
 
     def test_lex_pragma_directive_name_and_value(self):
         from pygments import token
 
-        tokens = self.lex('.pragma foo:bar\n', 'openssl')
-        self.assertEqual(tokens[0], (token.Name.Attribute, '.pragma'))
+        tokens = self.lex('.pragma abspath:bar\n', 'openssl')
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.pragma'))
         self.assertEqual(tokens[1], (token.Text, ' '))
-        self.assertEqual(tokens[2], (token.Keyword.Pseudo, 'foo'))
+        self.assertEqual(tokens[2], (token.Keyword.Pseudo, 'abspath'))
         self.assertEqual(tokens[3], (token.Operator, ':'))
-        self.assertEqual(tokens[4], (token.String, 'b'))
-        self.assertEqual(tokens[5], (token.String, 'a'))
-        self.assertEqual(tokens[6], (token.String, 'r'))
-        self.assertEqual(tokens[7], (token.Text, '\n'))
+        self.assertEqual(tokens[4], (token.String, 'bar'))
+        self.assertEqual(tokens[5], (token.Text, '\n'))
 
     def test_lex_pragma_directive_name_and_value_with_colon(self):
         from pygments import token
 
-        tokens = self.lex('.pragma foo:bar:baz\n', 'openssl')
-        self.assertEqual(tokens[0], (token.Name.Attribute, '.pragma'))
+        tokens = self.lex('.pragma abspath:bar:baz\n', 'openssl')
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.pragma'))
         self.assertEqual(tokens[1], (token.Text, ' '))
-        self.assertEqual(tokens[2], (token.Keyword.Pseudo, 'foo'))
+        self.assertEqual(tokens[2], (token.Keyword.Pseudo, 'abspath'))
         self.assertEqual(tokens[3], (token.Operator, ':'))
-        self.assertEqual(tokens[4], (token.String, 'b'))
-        self.assertEqual(tokens[5], (token.String, 'a'))
-        self.assertEqual(tokens[6], (token.String, 'r'))
-        self.assertEqual(tokens[7], (token.String, ':'))
-        self.assertEqual(tokens[8], (token.String, 'b'))
-        self.assertEqual(tokens[9], (token.String, 'a'))
-        self.assertEqual(tokens[10], (token.String, 'z'))
-        self.assertEqual(tokens[11], (token.Text, '\n'))
+        self.assertEqual(tokens[4], (token.String, 'bar:baz'))
+        self.assertEqual(tokens[5], (token.Text, '\n'))
 
     def test_lex_incomplete_pragma_directive(self):
         from pygments import token
 
         tokens = self.lex('.pragma\n', 'openssl')
-        self.assertEqual(tokens[0], (token.Name.Attribute, '.pragma'))
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.pragma'))
         self.assertEqual(tokens[1], (token.Text, '\n'))
 
         tokens = self.lex('.pragma\n.pragma foo\n', 'openssl')
-        self.assertEqual(tokens[0], (token.Name.Attribute, '.pragma'))
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.pragma'))
         self.assertEqual(tokens[1], (token.Text, '\n'))
-        self.assertEqual(tokens[2], (token.Name.Attribute, '.pragma'))
+        self.assertEqual(tokens[2], (token.Name.Builtin, '.pragma'))
         self.assertEqual(tokens[3], (token.Text, ' '))
-        self.assertEqual(tokens[4], (token.String, 'f'))
-        self.assertEqual(tokens[5], (token.String, 'o'))
-        self.assertEqual(tokens[6], (token.String, 'o'))
-        self.assertEqual(tokens[7], (token.Text, '\n'))
+        self.assertEqual(tokens[4], (token.String, 'foo'))
+        self.assertEqual(tokens[5], (token.Text, '\n'))
 
     def test_lex_incomplete_pragma_directive_and_operator(self):
         from pygments import token
 
         tokens = self.lex('.pragma =\n', 'openssl')
-        self.assertEqual(tokens[0], (token.Name.Attribute, '.pragma'))
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.pragma'))
         self.assertEqual(tokens[1], (token.Text, ' '))
         self.assertEqual(tokens[2], (token.Operator, '='))
         self.assertEqual(tokens[3], (token.Text, '\n'))
 
         tokens = self.lex('.pragma =\n.pragma = foo\n', 'openssl')
-        self.assertEqual(tokens[0], (token.Name.Attribute, '.pragma'))
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.pragma'))
         self.assertEqual(tokens[1], (token.Text, ' '))
         self.assertEqual(tokens[2], (token.Operator, '='))
         self.assertEqual(tokens[3], (token.Text, '\n'))
-        self.assertEqual(tokens[4], (token.Name.Attribute, '.pragma'))
+        self.assertEqual(tokens[4], (token.Name.Builtin, '.pragma'))
         self.assertEqual(tokens[5], (token.Text, ' '))
         self.assertEqual(tokens[6], (token.Operator, '='))
         self.assertEqual(tokens[7], (token.Text, ' '))
-        self.assertEqual(tokens[8], (token.String, 'f'))
-        self.assertEqual(tokens[9], (token.String, 'o'))
-        self.assertEqual(tokens[10], (token.String, 'o'))
-        self.assertEqual(tokens[11], (token.Text, '\n'))
+        self.assertEqual(tokens[8], (token.String, 'foo'))
+        self.assertEqual(tokens[9], (token.Text, '\n'))
 
     def test_lex_incomplete_pragma_directive_string(self):
         from pygments import token
 
         tokens = self.lex('.pragma', 'openssl')
-        self.assertEqual(tokens[0], (token.Name.Attribute, '.pragma'))
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.pragma'))
 
         tokens = self.lex('.pragma\n.pragma foo', 'openssl')
-        self.assertEqual(tokens[0], (token.Name.Attribute, '.pragma'))
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.pragma'))
         self.assertEqual(tokens[1], (token.Text, '\n'))
-        self.assertEqual(tokens[2], (token.Name.Attribute, '.pragma'))
+        self.assertEqual(tokens[2], (token.Name.Builtin, '.pragma'))
         self.assertEqual(tokens[3], (token.Text, ' '))
-        self.assertEqual(tokens[4], (token.String, 'f'))
-        self.assertEqual(tokens[5], (token.String, 'o'))
-        self.assertEqual(tokens[6], (token.String, 'o'))
+        self.assertEqual(tokens[4], (token.String, 'foo'))
+
+
+class IncludeDirectiveLexerTests(unittest.TestCase):
+
+    def lex(self, code, lexer_name):
+        from pygments import lex, lexers
+        return list(lex(code, lexers.get_lexer_by_name(lexer_name)))
+
+    def test_lex_include_directive(self):
+        from pygments import token
+
+        tokens = self.lex('.include foo\n', 'openssl')
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.include'))
+        self.assertEqual(tokens[1], (token.Text, ' '))
+        self.assertEqual(tokens[2], (token.String, 'foo'))
+        self.assertEqual(tokens[3], (token.Text, '\n'))
+
+    def test_lex_include_directive_and_operator(self):
+        from pygments import token
+
+        tokens = self.lex('.include = foo\n', 'openssl')
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.include'))
+        self.assertEqual(tokens[1], (token.Text, ' '))
+        self.assertEqual(tokens[2], (token.Operator, '='))
+        self.assertEqual(tokens[3], (token.Text, ' '))
+        self.assertEqual(tokens[4], (token.String, 'foo'))
+        self.assertEqual(tokens[5], (token.Text, '\n'))
+
+    def test_lex_pragme_directive_with_leading_whitespace(self):
+        from pygments import token
+
+        tokens = self.lex('  .include foo\n', 'openssl')
+        self.assertEqual(tokens[0], (token.Text, '  '))
+        self.assertEqual(tokens[1], (token.Name.Builtin, '.include'))
+        self.assertEqual(tokens[2], (token.Text, ' '))
+        self.assertEqual(tokens[3], (token.String, 'foo'))
+        self.assertEqual(tokens[4], (token.Text, '\n'))
+
+    def test_lex_incomplete_include_directive(self):
+        from pygments import token
+
+        tokens = self.lex('.include\n', 'openssl')
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.include'))
+        self.assertEqual(tokens[1], (token.Text, '\n'))
+
+        tokens = self.lex('.include\n.include foo\n', 'openssl')
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.include'))
+        self.assertEqual(tokens[1], (token.Text, '\n'))
+        self.assertEqual(tokens[2], (token.Name.Builtin, '.include'))
+        self.assertEqual(tokens[3], (token.Text, ' '))
+        self.assertEqual(tokens[4], (token.String, 'foo'))
+        self.assertEqual(tokens[5], (token.Text, '\n'))
+
+    def test_lex_incomplete_include_directive_and_operator(self):
+        from pygments import token
+
+        tokens = self.lex('.include =\n', 'openssl')
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.include'))
+        self.assertEqual(tokens[1], (token.Text, ' '))
+        self.assertEqual(tokens[2], (token.Operator, '='))
+        self.assertEqual(tokens[3], (token.Text, '\n'))
+
+        tokens = self.lex('.include =\n.include = foo\n', 'openssl')
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.include'))
+        self.assertEqual(tokens[1], (token.Text, ' '))
+        self.assertEqual(tokens[2], (token.Operator, '='))
+        self.assertEqual(tokens[3], (token.Text, '\n'))
+        self.assertEqual(tokens[4], (token.Name.Builtin, '.include'))
+        self.assertEqual(tokens[5], (token.Text, ' '))
+        self.assertEqual(tokens[6], (token.Operator, '='))
+        self.assertEqual(tokens[7], (token.Text, ' '))
+        self.assertEqual(tokens[8], (token.String, 'foo'))
+        self.assertEqual(tokens[9], (token.Text, '\n'))
+
+    def test_lex_incomplete_include_directive_string(self):
+        from pygments import token
+
+        tokens = self.lex('.include', 'openssl')
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.include'))
+
+        tokens = self.lex('.include\n.include foo', 'openssl')
+        self.assertEqual(tokens[0], (token.Name.Builtin, '.include'))
+        self.assertEqual(tokens[1], (token.Text, '\n'))
+        self.assertEqual(tokens[2], (token.Name.Builtin, '.include'))
+        self.assertEqual(tokens[3], (token.Text, ' '))
+        self.assertEqual(tokens[4], (token.String, 'foo'))
 
