@@ -197,6 +197,11 @@ class OpenSSLConfLexer(RegexLexer):
         ],
     }
 
+    def __init__(self, **options):
+        super(OpenSSLConfLexer, self).__init__(**options)
+        # Always apply tokenmerge filter
+        self.add_filter('tokenmerge')
+
     def analyse_text(text):
         npos = text.find('\n')
         if npos < 3:
