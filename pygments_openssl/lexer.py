@@ -20,6 +20,12 @@ T_EMAIL = T_RHS
 T_IP = T_RHS
 T_HEX = T_RHS
 
+T_KNOWNDIR = Name.Builtin
+T_OTHERDIR = T_LHS
+
+T_KNOWNNAME = Keyword.Pseudo
+T_OTHERNAME = T_RHS
+
 
 class OpenSSLConfLexer(RegexLexer):
     """Pygments lexer for OpenSSL configuration files.
@@ -57,7 +63,7 @@ class OpenSSLConfLexer(RegexLexer):
         ],
         'email': [
             # Email
-            (r'[\w\.+-]+\@[\w\.+-]+', T_EMAIL),
+            (r'[\w\.+-]+\@[\w\.-]+', T_EMAIL),
             default('#pop'),
         ],
         'ip': [
@@ -129,16 +135,16 @@ class OpenSSLConfLexer(RegexLexer):
             # Section header
             (r'\[.*?\](?=\n)', Keyword),
             # Pragma directive
-            (r'(?i)(\.pragma)(?=\W)([^\S\n]*)(=)([^\S\n]*)', bygroups(T_LHS, T_SPACE, Operator, T_SPACE), 'pragma'),
-            (r'(?i)(\.pragma)(?=\W)([^\S\n]+)', bygroups(T_LHS, T_SPACE), 'pragma'),
+            (r'(?i)(\.pragma)(?=[\s=\\])([^\S\n]*)(=)([^\S\n]*)', bygroups(T_KNOWNDIR, T_SPACE, Operator, T_SPACE), 'pragma'),
+            (r'(?i)(\.pragma)(?=[\s\\])([^\S\n]*)', bygroups(T_KNOWNDIR, T_SPACE), 'pragma'),
             # Include directive
-            (r'(?i)(\.include)(?=\W)([^\S\n]*)(=)([^\S\n]*)', bygroups(T_LHS, T_SPACE, Operator, T_SPACE), 'other'),
-            (r'(?i)(\.include)(?=\W)([^\S\n]+)', bygroups(T_LHS, T_SPACE), 'other'),
+            (r'(?i)(\.include)(?=[\s=\\])([^\S\n]*)(=)([^\S\n]*)', bygroups(T_KNOWNDIR, T_SPACE, Operator, T_SPACE), 'other'),
+            (r'(?i)(\.include)(?=[\s\\])([^\S\n]*)', bygroups(T_KNOWNDIR, T_SPACE), 'other'),
             # Other directives
-            (r'(\.\S+?)([^\S\n]*)(=)([^\S\n]*)', bygroups(T_LHS, T_SPACE, Operator, T_SPACE), 'other'),
-            (r'(\.\S+?)([^\S\n]+)', bygroups(T_LHS, T_SPACE), 'other'),
+            (r'(\.[\w-]+)([^\S\n]*)(=)([^\S\n]*)', bygroups(T_OTHERDIR, T_SPACE, Operator, T_SPACE), 'other'),
+            (r'(\.[\w-]+)([^\S\n]*)', bygroups(T_OTHERDIR, T_SPACE), 'other'),
             # Left hand side
-            (r'(\w+)(\s*)', bygroups(T_LHS, T_SPACE)),
+            (r'([\w\.;-]+)(\s*)', bygroups(T_LHS, T_SPACE)),
             # Operator
             (r'(=)([^\S\n]*)', bygroups(Operator, T_SPACE), 'rhs'),
             include('lhs-default'),
@@ -169,9 +175,9 @@ class OpenSSLConfLexer(RegexLexer):
             # Exit condition
             (r'(?<!\\)\n', T_SPACE, '#pop'),
             # Known directive names
-            (r'(?i)(?<=\W)(abspath|dollarid|includedir)(?=\W)([^\S\n]*)(:)([^\S\n]*)', bygroups(Keyword.Pseudo, T_SPACE, Operator, T_SPACE), 'value'),
+            (r'(?i)(?<=\W)(abspath|dollarid|includedir)(?=\W)([^\S\n]*)(:)([^\S\n]*)', bygroups(T_KNOWNNAME, T_SPACE, Operator, T_SPACE), 'value'),
             # Other directive names
-            (r'(\S+?)([^\S\n]*)(:)([^\S\n]*)', bygroups(Keyword.Pseudo, T_SPACE, Operator, T_SPACE), 'value'),
+            (r'([\w-]+)([^\S\n]*)(:)([^\S\n]*)', bygroups(T_OTHERNAME, T_SPACE, T_RHS, T_SPACE), 'value'),
             include('string'),
             include('variable'),
             include('number'),
