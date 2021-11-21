@@ -22,9 +22,7 @@ T_HEX = T_RHS
 
 
 class OpenSSLConfLexer(RegexLexer):
-    """
-    Lexer for `OpenSSL <https://www.openssl.org/docs/man1.1.0/apps/config.html>`_
-    configuration files.
+    """Pygments lexer for OpenSSL configuration files.
     """
 
     name = 'OpenSSL'
