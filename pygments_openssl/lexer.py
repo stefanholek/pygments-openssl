@@ -13,9 +13,6 @@ T_RHS = String
 T_SPACE = Text
 
 T_NUMBER = T_RHS
-T_OID = Name.Function
-T_SECREF = Name.Constant
-
 T_EMAIL = T_RHS
 T_IP = T_RHS
 T_HEX = T_RHS
@@ -51,7 +48,7 @@ class OpenSSLConfLexer(RegexLexer):
             # Variable name inside curly braces
             (r'\${', Name.Variable, 'curly-brace'),
             # Variable name inside parentheses
-            (r'\$\(', Name.Variable, 'parenthesis'),
+            (r'\$\(', Name.Variable, 'paren'),
             # Variable name
             (r'\$\w+(?:::\w+)?', Name.Variable),
         ],
@@ -70,7 +67,7 @@ class OpenSSLConfLexer(RegexLexer):
             # IP4
             (r'[\d\.]+', T_IP),
             # IP6
-            (r'[\da-fA-F:]+', T_IP),
+            (r'[\da-fA-F:\.]+', T_IP),
             default('#pop'),
         ],
         'hex': [
@@ -96,7 +93,7 @@ class OpenSSLConfLexer(RegexLexer):
             # Catch all
             (r'[^}]+', T_RHS),
         ],
-        'parenthesis': [
+        'paren': [
             # Exit condition
             (r'\)', Name.Variable, '#pop'),
             # Variable name
@@ -162,10 +159,10 @@ class OpenSSLConfLexer(RegexLexer):
             include('string'),
             include('variable'),
             # OID
-            (r'(?<=\W)\d+\.(?:\d+\.?)*(?=\W)', T_OID),
+            (r'(?<=\W)\d+\.(?:\d+\.?)*(?=\W)', Name.Function),
             include('number'),
             # Section reference
-            (r'(?<=\W)\@\w+', T_SECREF),
+            (r'(?<=\W)\@\w+', Name.Constant),
             # Critical keyword
             (r'(?i)(?<=\W)critical(?=\W)', Keyword.Pseudo),
             include('rhs-default'),
