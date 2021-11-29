@@ -132,14 +132,20 @@ class OpenSSLConfLexer(RegexLexer):
             # Section header
             (r'\[.*?\](?=\n)', Keyword),
             # Pragma directive
-            (r'(?i)(\.pragma)(?=[\s=\\])([^\S\n]*)(=)([^\S\n]*)', bygroups(T_KNOWNDIR, T_SPACE, Operator, T_SPACE), 'pragma'),
-            (r'(?i)(\.pragma)(?=[\s\\])([^\S\n]*)', bygroups(T_KNOWNDIR, T_SPACE), 'pragma'),
+            (r'(?i)(\.pragma)(?=[\s=\\])([^\S\n]*)(=)([^\S\n]*)',
+                bygroups(T_KNOWNDIR, T_SPACE, Operator, T_SPACE), 'pragma'),
+            (r'(?i)(\.pragma)(?=[\s\\])([^\S\n]*)',
+                bygroups(T_KNOWNDIR, T_SPACE), 'pragma'),
             # Include directive
-            (r'(?i)(\.include)(?=[\s=\\])([^\S\n]*)(=)([^\S\n]*)', bygroups(T_KNOWNDIR, T_SPACE, Operator, T_SPACE), 'other'),
-            (r'(?i)(\.include)(?=[\s\\])([^\S\n]*)', bygroups(T_KNOWNDIR, T_SPACE), 'other'),
+            (r'(?i)(\.include)(?=[\s=\\])([^\S\n]*)(=)([^\S\n]*)',
+                bygroups(T_KNOWNDIR, T_SPACE, Operator, T_SPACE), 'other'),
+            (r'(?i)(\.include)(?=[\s\\])([^\S\n]*)',
+                bygroups(T_KNOWNDIR, T_SPACE), 'other'),
             # Other directives
-            (r'(\.[\w-]+)([^\S\n]*)(=)([^\S\n]*)', bygroups(T_OTHERDIR, T_SPACE, Operator, T_SPACE), 'other'),
-            (r'(\.[\w-]+)([^\S\n]*)', bygroups(T_OTHERDIR, T_SPACE), 'other'),
+            (r'(\.[\w-]+)([^\S\n]*)(=)([^\S\n]*)',
+                bygroups(T_OTHERDIR, T_SPACE, Operator, T_SPACE), 'other'),
+            (r'(\.[\w-]+)([^\S\n]*)',
+                bygroups(T_OTHERDIR, T_SPACE), 'other'),
             # Left hand side
             (r'([\w\.;-]+)(\s*)', bygroups(T_LHS, T_SPACE)),
             # Operator
@@ -151,11 +157,14 @@ class OpenSSLConfLexer(RegexLexer):
             # Exit condition
             (r'(?<!\\)\n', T_SPACE, '#pop'),
             # Email
-            (r'(?i)(?<=\W)(email)(?=\W)([^\S\n]*)(:)([^\S\n]*)', bygroups(T_RHS, T_SPACE, T_RHS, T_SPACE), 'email'),
+            (r'(?i)(?<=\W)(email)(?=\W)([^\S\n]*)(:)([^\S\n]*)',
+                bygroups(T_RHS, T_SPACE, T_RHS, T_SPACE), 'email'),
             # IP
-            (r'(?i)(?<=\W)(IP)(?=\W)([^\S\n]*)(:)([^\S\n]*)', bygroups(T_RHS, T_SPACE, T_RHS, T_SPACE), 'ip'),
+            (r'(?i)(?<=\W)(IP)(?=\W)([^\S\n]*)(:)([^\S\n]*)',
+                bygroups(T_RHS, T_SPACE, T_RHS, T_SPACE), 'ip'),
             # DER
-            (r'(?i)(?<=\W)(DER)(?=\W)([^\S\n]*)(:)([^\S\n]*)', bygroups(T_RHS, T_SPACE, T_RHS, T_SPACE), 'hex'),
+            (r'(?i)(?<=\W)(DER)(?=\W)([^\S\n]*)(:)([^\S\n]*)',
+                bygroups(T_RHS, T_SPACE, T_RHS, T_SPACE), 'hex'),
             include('string'),
             include('variable'),
             # OID
@@ -172,9 +181,11 @@ class OpenSSLConfLexer(RegexLexer):
             # Exit condition
             (r'(?<!\\)\n', T_SPACE, '#pop'),
             # Known directive names
-            (r'(?i)(?<=\W)(abspath|dollarid|includedir)(?=\W)([^\S\n]*)(:)([^\S\n]*)', bygroups(T_KNOWNNAME, T_SPACE, Operator, T_SPACE), 'value'),
+            (r'(?i)(?<=\W)(abspath|dollarid|includedir)(?=\W)([^\S\n]*)(:)([^\S\n]*)',
+                bygroups(T_KNOWNNAME, T_SPACE, Operator, T_SPACE), 'value'),
             # Other directive names
-            (r'([\w-]+)([^\S\n]*)(:)([^\S\n]*)', bygroups(T_OTHERNAME, T_SPACE, T_RHS, T_SPACE), 'value'),
+            (r'([\w-]+)([^\S\n]*)(:)([^\S\n]*)',
+                bygroups(T_OTHERNAME, T_SPACE, T_RHS, T_SPACE), 'value'),
             include('string'),
             include('variable'),
             include('number'),
