@@ -25,6 +25,9 @@ Changelog
 * Support new ``.pragma`` and ``.include`` directives.
   [stefan]
 
+* Pygments 2.11 whitespace token modernization.
+  [stefan]
+
 1.4 - 2019-01-25
 ----------------
 

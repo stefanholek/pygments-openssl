@@ -10,7 +10,10 @@ from pygments.token import Punctuation, Text, Comment, Keyword, Name, String, \
 
 T_LHS = Name.Attribute
 T_RHS = String
-T_SPACE = Text
+
+# Pygments 2.11 changed the whitespace token type
+from pygments import lex, lexers
+T_SPACE = list(lex(' ', lexers.get_lexer_by_name('ini')))[0][0]
 
 T_NUMBER = T_RHS
 T_EMAIL = T_RHS
