@@ -13,13 +13,13 @@ Changelog
 * Remove deprecated ``test_suite`` from setup.py.
   [stefan]
 
-* Move lexer and tests into ``pygments_openssl`` namespace.
+* Move lexer into ``pygments_openssl`` namespace.
   [stefan]
 
 * Move metadata to setup.cfg and add a pyproject.toml file.
   [stefan]
 
-* Include tests in sdists but not in wheels.
+* Include tests in sdist but not in wheel.
   [stefan]
 
 * Support new ``.pragma`` and ``.include`` directives.
