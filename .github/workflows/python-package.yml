@@ -1,5 +1,3 @@
-# https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
 name: CI
 
 on:
@@ -18,35 +16,35 @@ jobs:
         python-version: ["2.7", "3.6", "3.7", "3.8", "3.9", "3.10", pypy-2.7, pypy-3.6, pypy-3.7]
 
     steps:
-    - name: Check out project
-      uses: actions/checkout@v2
+      - name: Check out project
+        uses: actions/checkout@v3
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Get pip cache info
-      id: pip-cache
-      run: |
-        echo "::set-output name=dir::$(python -m pip --disable-pip-version-check cache dir)"
-        echo "::set-output name=py::$(python -c'import sys; print(sys.version_info[0])')"
+      - name: Get pip cache info
+        id: pip-cache
+        run: |
+          echo "dir=$(python -m pip --disable-pip-version-check cache dir)" >> $GITHUB_OUTPUT
+          echo "py=$(python -c'import sys; print(sys.version_info[0])')" >> $GITHUB_OUTPUT
 
-    - name: Cache pip
-      uses: actions/cache@v2
-      with:
-        path: ${{ steps.pip-cache.outputs.dir }}
-        key: ${{ runner.os }}-pip-py${{ steps.pip-cache.outputs.py }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{ runner.os }}-pip-py${{ steps.pip-cache.outputs.py }}-
+      - name: Cache pip
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-py${{ steps.pip-cache.outputs.py }}-${{ hashFiles('setup.cfg') }}
+          restore-keys: ${{ runner.os }}-pip-py${{ steps.pip-cache.outputs.py }}-
 
-    - name: Install dependencies
-      run: |
-        python -m pip --disable-pip-version-check install -U pip setuptools wheel
-        python -m pip --disable-pip-version-check install -e .
+      - name: Install dependencies
+        run: |
+          python -m pip --disable-pip-version-check install -U pip setuptools wheel
+          python -m pip --disable-pip-version-check install -e .
 
-    - name: List installed packages
-      run: python -m pip --disable-pip-version-check list
+      - name: List installed packages
+        run: python -m pip --disable-pip-version-check list
 
-    - name: Run tests
-      run: python -m unittest discover
+      - name: Run tests
+        run: python -m unittest discover
 
