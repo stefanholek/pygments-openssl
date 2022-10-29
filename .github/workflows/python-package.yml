@@ -16,6 +16,9 @@ jobs:
         python-version: ["2.7", "3.6", "3.7", "3.8", "3.9", "3.10", "3.11", pypy-2.7, pypy-3.9]
 
     steps:
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.11.0
+
       - name: Check out project
         uses: actions/checkout@v3
 
