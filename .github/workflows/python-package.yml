@@ -42,6 +42,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m pip --disable-pip-version-check --no-python-version-warning install -U certifi
           python -m pip --disable-pip-version-check --no-python-version-warning install -U pip setuptools wheel
           python -m pip --disable-pip-version-check --no-python-version-warning install -e .
 
