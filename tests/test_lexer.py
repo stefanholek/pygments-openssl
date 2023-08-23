@@ -1,6 +1,9 @@
 import unittest
+import pygments
 
 from pygments_openssl.lexer import T_SPACE
+
+pygments_version_info = tuple(map(int, pygments.__version__.split('.')))
 
 
 class LexerTests(unittest.TestCase):
@@ -108,8 +111,14 @@ class LexerTests(unittest.TestCase):
         self.assertEqual(tokens[1], (T_SPACE, ' '))
         self.assertEqual(tokens[2], (token.Operator, '='))
         self.assertEqual(tokens[3], (T_SPACE, ' '))
-        self.assertEqual(tokens[4], (token.String, '. # Comment'))
-        self.assertEqual(tokens[5], (T_SPACE, '\n'))
+        if pygments_version_info >= (2, 14, 0):
+            self.assertEqual(tokens[4], (token.String, '.'))
+            self.assertEqual(tokens[5], (T_SPACE, ' '))
+            self.assertEqual(tokens[6], (token.Comment.Single, '# Comment'))
+            self.assertEqual(tokens[7], (T_SPACE, '\n'))
+        else:
+            self.assertEqual(tokens[4], (token.String, '. # Comment'))
+            self.assertEqual(tokens[5], (T_SPACE, '\n'))
 
     def test_lex_rhs_double_quoted_string(self):
         from pygments import token
