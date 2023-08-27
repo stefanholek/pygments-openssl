@@ -4,6 +4,14 @@ Changelog
 1.6 - Unreleased
 ----------------
 
+* Update INI lexer tests for Pygments >= 2.14.
+  [stefan]
+
+* Update tox.ini for latest tox.
+  [stefan]
+
+* Add GitHub CI workflow.
+  [stefan]
 
 1.5 - 2022-02-27
 ----------------
