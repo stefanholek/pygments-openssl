@@ -111,6 +111,7 @@ class LexerTests(unittest.TestCase):
         self.assertEqual(tokens[1], (T_SPACE, ' '))
         self.assertEqual(tokens[2], (token.Operator, '='))
         self.assertEqual(tokens[3], (T_SPACE, ' '))
+
         if pygments_version_info >= (2, 14, 0):
             self.assertEqual(tokens[4], (token.String, '.'))
             self.assertEqual(tokens[5], (T_SPACE, ' '))
@@ -136,8 +137,15 @@ class LexerTests(unittest.TestCase):
         self.assertEqual(tokens[1], (T_SPACE, ' '))
         self.assertEqual(tokens[2], (token.Operator, '='))
         self.assertEqual(tokens[3], (T_SPACE, ' '))
-        self.assertEqual(tokens[4], (token.String, '"foo bar"'))
-        self.assertEqual(tokens[5], (T_SPACE, '\n'))
+
+        if pygments_version_info >= (2, 19, 0):
+            self.assertEqual(tokens[4], (token.String, '"'))
+            self.assertEqual(tokens[5], (token.String, 'foo bar'))
+            self.assertEqual(tokens[6], (token.String, '"'))
+            self.assertEqual(tokens[7], (T_SPACE, '\n'))
+        else:
+            self.assertEqual(tokens[4], (token.String, '"foo bar"'))
+            self.assertEqual(tokens[5], (T_SPACE, '\n'))
 
     def test_lex_rhs_single_quoted_string(self):
         from pygments import token
@@ -155,8 +163,15 @@ class LexerTests(unittest.TestCase):
         self.assertEqual(tokens[1], (T_SPACE, ' '))
         self.assertEqual(tokens[2], (token.Operator, '='))
         self.assertEqual(tokens[3], (T_SPACE, ' '))
-        self.assertEqual(tokens[4], (token.String, "'foo bar'"))
-        self.assertEqual(tokens[5], (T_SPACE, '\n'))
+
+        if pygments_version_info >= (2, 19, 0):
+            self.assertEqual(tokens[4], (token.String, "'"))
+            self.assertEqual(tokens[5], (token.String, "foo bar"))
+            self.assertEqual(tokens[6], (token.String, "'"))
+            self.assertEqual(tokens[7], (T_SPACE, '\n'))
+        else:
+            self.assertEqual(tokens[4], (token.String, "'foo bar'"))
+            self.assertEqual(tokens[5], (T_SPACE, '\n'))
 
     def test_lex_rhs_variable_name(self):
         from pygments import token
