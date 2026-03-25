@@ -4,6 +4,8 @@ Changelog
 1.7 - Unreleased
 ----------------
 
+* Update INI lexer tests for Pygments >= 2.19.
+  [stefan]
 
 1.6 - 2023-09-14
 ----------------
