@@ -7,6 +7,9 @@ Changelog
 * Update INI lexer tests for Pygments >= 2.19.
   [stefan]
 
+- Remove support for universal wheels.
+  [stefan]
+
 1.6 - 2023-09-14
 ----------------
 
