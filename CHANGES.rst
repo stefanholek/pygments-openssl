@@ -7,10 +7,13 @@ Changelog
 * Update INI lexer tests for Pygments >= 2.19.
   [stefan]
 
-- Remove support for universal wheels.
+* Remove support for universal wheels.
   [stefan]
 
-- Remove deprecated license classifier.
+* Remove deprecated license classifier.
+  [stefan]
+
+* Upgrade GitHub workflow.
   [stefan]
 
 1.6 - 2023-09-14
