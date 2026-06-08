@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.7 - Unreleased
+2.0 - Unreleased
 ----------------
 
 * Update INI lexer tests for Pygments >= 2.19.
