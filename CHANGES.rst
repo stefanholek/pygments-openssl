@@ -16,6 +16,9 @@ Changelog
 * Upgrade GitHub workflow.
   [stefan]
 
+* Require Python >= 3.5.
+  [stefan]
+
 1.6 - 2023-09-14
 ----------------
 
