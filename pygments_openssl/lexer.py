@@ -215,7 +215,7 @@ class OpenSSLConfLexer(RegexLexer):
     }
 
     def __init__(self, **options):
-        super(OpenSSLConfLexer, self).__init__(**options)
+        super().__init__(**options)
         # Always apply tokenmerge filter
         self.add_filter('tokenmerge')
 
